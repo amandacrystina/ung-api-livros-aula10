@@ -22,7 +22,8 @@ public class LivroModel {
     @JoinColumn(name = "autor_id")
     private AutorModel autor;
 
-    public LivroModel() {}
+    public LivroModel() {
+    }
 
     public Long getId() {
         return id;

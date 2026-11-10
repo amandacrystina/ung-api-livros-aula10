@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.aula.dto.LivroEntradaDto;
 import br.com.aula.dto.LivroSaidaDto;
 import br.com.aula.service.LivroService;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -32,7 +31,7 @@ public class LivroController {
     }
 
     @Operation(
-        summary = "Listar livro cadastrados", 
+        summary = "Listar livros cadastrados", 
         description = "Retorna uma lista com os dados dos livros cadastrados."
     )
     @ApiResponses({
@@ -73,7 +72,11 @@ public class LivroController {
         URI location = URI.create("/api/livros/" + livro.id());
         return ResponseEntity.created(location).body(livro);
     }
-    @Operation(summary = "Consultar livros por autor", description = "Retorna todos os livros de um determinado autor")
+
+    @Operation(
+        summary = "Consultar livros por autor", 
+        description = "Retorna todos os livros de um determinado autor"
+    )
     @GetMapping("/autor/{autorId}")
     public ResponseEntity<List<LivroSaidaDto>> getLivrosByAutor(@PathVariable Long autorId) {
         List<LivroSaidaDto> livros = this.livroService.listarPorAutor(autorId);

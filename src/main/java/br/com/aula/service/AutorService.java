@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.aula.dto.AutorEntradaDto;
 import br.com.aula.dto.AutorSaidaDto;
+import br.com.aula.exception.AutorNaoEncontradoException;
 import br.com.aula.model.AutorModel;
 import br.com.aula.repository.AutorRepository;
 
@@ -22,25 +23,26 @@ public class AutorService {
     public AutorSaidaDto cadastrar(AutorEntradaDto dto) {
         AutorModel autor = new AutorModel();
         autor.setNome(dto.nome());
-        AutorModel salvo = autorRepository.save(autor);
+        AutorModel salvo = this.autorRepository.save(autor);
         return converterParaDto(salvo);
     }
 
     public List<AutorSaidaDto> listarTodos() {
-        List<AutorSaidaDto> dtos = new ArrayList<>();
-        for (AutorModel autor : autorRepository.findAll()) {
-            dtos.add(converterParaDto(autor));
+        List<AutorSaidaDto> resposta = new ArrayList<>();
+        List<AutorModel> itens = this.autorRepository.findAll();
+        for (AutorModel item : itens) {
+            resposta.add(converterParaDto(item));
         }
-        return dtos;
+        return resposta;
     }
 
     public AutorSaidaDto buscarPorId(Long id) {
-        AutorModel autor = autorRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Autor não encontrado"));
+        AutorModel autor = this.autorRepository.findById(id)
+                .orElseThrow(() -> new AutorNaoEncontradoException(id));
         return converterParaDto(autor);
     }
 
-    public AutorSaidaDto converterParaDto(AutorModel autor) {
-        return new AutorSaidaDto(autor.getId(), autor.getNome());
+    private AutorSaidaDto converterParaDto(AutorModel item) {
+        return new AutorSaidaDto(item.getId(), item.getNome());
     }
 }
